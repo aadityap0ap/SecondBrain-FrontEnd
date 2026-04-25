@@ -1,4 +1,5 @@
 import { Button } from "./components/ui/Button";
+import { Card } from "./components/ui/Card";
 import { PlusIcon } from "./icons/PlusIcon";
 import { ShareIcon } from "./icons/ShareIcon";
 
@@ -18,6 +19,8 @@ export default function App (){
         size="md" 
         text="Add Content" 
       />
+
+      <Card/>
     </div>
       
     
