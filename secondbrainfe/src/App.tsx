@@ -20,7 +20,7 @@ export default function App() {
           startIcon={<PlusIcon size="md" />}
           variant="primary"
           size="md"
-          text="Add Content"
+          text="Content"
         />
       </div>
 
