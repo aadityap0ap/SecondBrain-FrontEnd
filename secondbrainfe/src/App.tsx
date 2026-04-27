@@ -39,6 +39,12 @@ export default function App() {
           title="DSA tutorial"
         />
 
+        <Card
+          type="youtube"
+          link="https://youtu.be/jwZPK4jh5Rw"
+          title="DSA tutorial"
+        />
+
       </div>
     </div>
   );
