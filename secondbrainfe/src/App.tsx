@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { Button } from "./components/ui/Button";
 import { Card } from "./components/ui/Card";
+import { CreateContentModal } from "./components/ui/CreateContentModal";
 import { PlusIcon } from "./icons/PlusIcon";
 import { ShareIcon } from "./icons/ShareIcon";
 
 export default function App() {
+  const [modalOpen , setModalOpen] = useState(false);
   return (
     <div className="p-4 space-y-6">
-
+      
+      <CreateContentModal open={modalOpen} onClose={() => {
+        setModalOpen(false);
+      }}/>
       {/* Buttons */}
       <div className="flex items-center justify-end gap-4">
         <Button
@@ -17,10 +23,13 @@ export default function App() {
         />
 
         <Button
+          onClick={() => {
+            setModalOpen(true);
+          }}
           startIcon={<PlusIcon size="md" />}
           variant="primary"
           size="md"
-          text="Content"
+          text="Add Content"
         />
       </div>
 
@@ -38,13 +47,6 @@ export default function App() {
           link="https://youtu.be/jwZPK4jh5Rw"
           title="DSA tutorial"
         />
-
-        <Card
-          type="youtube"
-          link="https://youtu.be/jwZPK4jh5Rw"
-          title="DSA tutorial"
-        />
-
       </div>
     </div>
   );
