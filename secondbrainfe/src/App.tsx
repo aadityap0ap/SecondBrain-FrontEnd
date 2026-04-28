@@ -4,11 +4,15 @@ import { Card } from "./components/ui/Card";
 import { CreateContentModal } from "./components/ui/CreateContentModal";
 import { PlusIcon } from "./icons/PlusIcon";
 import { ShareIcon } from "./icons/ShareIcon";
+import { Sidebar } from "./components/ui/Sidebar";
 
 export default function App() {
   const [modalOpen , setModalOpen] = useState(false);
   return (
-    <div className="p-4 space-y-6">
+    <div>
+
+    <Sidebar/>
+    <div className="p-4 ml-72 min-h-screen bg-gray-100  space-y-6">
       
       <CreateContentModal open={modalOpen} onClose={() => {
         setModalOpen(false);
@@ -48,6 +52,7 @@ export default function App() {
           title="DSA tutorial"
         />
       </div>
+    </div>
     </div>
   );
 }
