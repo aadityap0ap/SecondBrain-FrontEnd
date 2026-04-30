@@ -10,7 +10,7 @@ export function Signin() {
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function signin() {
@@ -23,7 +23,7 @@ export function Signin() {
     }
 
     try {
-      setLoading(true);
+      //setLoading(true);
 
       const response = await axios.post(BACKEND_URL + "/signin", {
         username,
@@ -47,9 +47,7 @@ export function Signin() {
       console.log(err);
       console.log(err.response?.data);
       alert(err.response?.data?.message || "Signin failed ");
-    } finally {
-      setLoading(false);
-    }
+    } 
   }
 
   return (
@@ -65,7 +63,7 @@ export function Signin() {
           <Button
             variant="secondary"
             size="md"
-            text={loading ? "Signing in..." : "Sign In"}
+            text={"SignIn"}
             onClick={signin}
           />
         </div>
