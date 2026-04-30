@@ -1,5 +1,5 @@
 import { CrossIcon } from "../../icons/CrossIcon";
-import { Input } from "../Input";
+import { Input } from "./Input";
 import { Button } from "./Button";
 
 //@ts-ignore

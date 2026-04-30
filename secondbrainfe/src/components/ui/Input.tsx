@@ -1,9 +1,8 @@
-//@ts-ignore
 export function Input({
   onChange,
   placeholder,
 }: {
-  onChange: () => void;
+  onChange?: () => void;
   placeholder: string;
 }) {
   return (
