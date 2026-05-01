@@ -31,12 +31,11 @@ export function Signin() {
       });
 
       const token = response.data.token;
-
       if (!token) {
         alert("Invalid response from server");
         return;
       }
-
+      //storing token in local storage but we can use httpcookie and react in memeory
       // store token
       localStorage.setItem("token", token);
 
