@@ -16,20 +16,17 @@ export function Signin() {
   async function signin() {
     const username = usernameRef.current?.value;
     const password = passwordRef.current?.value;
-
     if (!username || !password) {
       alert("Please fill all fields");
       return;
     }
 
     try {
-      //setLoading(true);
-
+      //setLoading(true);  
       const response = await axios.post(BACKEND_URL + "/signin", {
         username,
         password,
       });
-
       const token = response.data.token;
       if (!token) {
         alert("Invalid response from server");
