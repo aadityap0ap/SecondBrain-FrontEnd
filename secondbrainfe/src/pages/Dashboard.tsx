@@ -1,58 +1,119 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { CreateContentModal } from "../components/ui/CreateContentModal";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Sidebar } from "../components/ui/Sidebar";
+import { BACKEND_URL } from "../config";
+
+type ContentType = "youtube" | "tweet";
+
+type Content = {
+  _id: string;
+  type: ContentType;
+  link: string;
+  title: string;
+};
 
 export default function Dashboard() {
-  const [modalOpen , setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [contents, setContents] = useState<Content[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  async function fetchContent() {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/signin");
+        return;
+      }
+
+      const response = await axios.get(`${BACKEND_URL}/content`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ FIX
+        },
+      });
+
+      const filtered: Content[] = response.data.contents.filter(
+        (item: any) => item.type === "youtube" || item.type === "tweet"
+      );
+
+      setContents(filtered);
+    } catch (err: any) {
+      console.error("Error fetching content:", err);
+
+      if (err.response?.status === 403) {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
   return (
     <div>
+      <Sidebar />
 
-    <Sidebar/>
-    <div className="p-4 ml-72 min-h-screen bg-gray-100  space-y-6">
-      
-      <CreateContentModal open={modalOpen} onClose={() => {
-        setModalOpen(false);
-      }}/>
-      {/* Buttons */}
-      <div className="flex items-center justify-end gap-4">
-        <Button
-          startIcon={<ShareIcon size="md" />}
-          variant="secondary"
-          size="md"
-          text="Share Brain"
-        />
-
-        <Button
-          onClick={() => {
-            setModalOpen(true);
+      <div className="p-4 ml-72 min-h-screen bg-gray-100 space-y-6">
+        {/* Modal */}
+        <CreateContentModal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            fetchContent(); // refresh
           }}
-          startIcon={<PlusIcon size="md" />}
-          variant="primary"
-          size="md"
-          text="Add Content"
         />
+
+        {/* Buttons */}
+        <div className="flex items-center justify-end gap-4">
+          <Button
+            startIcon={<ShareIcon size="md" />}
+            variant="secondary"
+            size="md"
+            text="Share Brain"
+          />
+
+          <Button
+            onClick={() => setModalOpen(true)}
+            startIcon={<PlusIcon size="md" />}
+            variant="primary"
+            size="md"
+            text="Add Content"
+          />
+        </div>
+
+        {/* Content */}
+        {loading ? (
+          <p className="text-gray-600 text-lg">Loading...</p>
+        ) : contents.length === 0 ? (
+          <p className="text-gray-500 text-lg">
+            No content yet. Start adding!
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-4 items-start">
+            {contents.map((item) => (
+              <Card
+                key={item._id}
+                type={item.type}
+                link={item.link}
+                title={item.title}
+              />
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* Cards */}
-      <div className="flex flex-wrap gap-4 items-start">
-
-        <Card
-          type="twitter"
-          link="https://twitter.com/Interior/status/1465053672593784834"
-          title="First Tweet"
-        />
-
-        <Card
-          type="youtube"
-          link="https://youtu.be/jwZPK4jh5Rw"
-          title="DSA tutorial"
-        />
-      </div>
-    </div>
     </div>
   );
 }

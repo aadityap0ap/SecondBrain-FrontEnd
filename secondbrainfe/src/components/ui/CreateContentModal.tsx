@@ -1,29 +1,104 @@
+import { useState } from "react";
+import axios from "axios";
 import { CrossIcon } from "../../icons/CrossIcon";
-import { Input } from "./Input";
+//import { Input } from "./Input";
 import { Button } from "./Button";
+import { BACKEND_URL } from "../../config";
 
-//@ts-ignore
-export function CreateContentModal ({open,onClose}){
-    return <div>
-        {open && <div className="w-screen h-screen bg-slate-500 fixed top-0 left-0 opacity-60 flex justify-center">
-            <div className="flex flex-col justify-center">
-                <span className="bg-white opacity-100 p-4 rounded">
-                    <div className="flex justify-end">
-                        <div onClick={onClose} className="cursor-pointer">
-                            <CrossIcon/>
-                        </div>
-                        
-                    </div>
-                    <div >
-                        <Input placeholder={"title"}/>
-                        <Input placeholder={"Link"}/>
-                    </div>
-                    <div className="flex justify-center">
-                        <Button variant="primary" text="Submit" size="md"></Button>
-                    </div>
-                    
-                </span>
-            </div> 
-            </div>}
+type Props = {
+  open: boolean;
+  onClose: () => void;
+};
+
+export function CreateContentModal({ open, onClose }: Props) {
+  const [title, setTitle] = useState("");
+  const [link, setLink] = useState("");
+  const [type, setType] = useState<"youtube" | "tweet">("youtube");
+
+  async function submit() {
+    try {
+      await axios.post(
+        `${BACKEND_URL}/content`,
+        {
+          title,
+          link,
+          type,
+          tags: ["default"],
+        },
+        {
+          headers: {
+           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      onClose(); // close modal after submit
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (!open) return null;
+
+  return (
+    <div className="w-screen h-screen bg-slate-500 fixed top-0 left-0 bg-opacity-60 flex justify-center items-center">
+      <div className="bg-white p-4 rounded w-80">
+        
+        {/* Close button */}
+        <div className="flex justify-end">
+          <div onClick={onClose} className="cursor-pointer">
+            <CrossIcon />
+          </div>
+        </div>
+
+        {/* Inputs */}
+        <div className="flex flex-col gap-2">
+          <input
+            className="border p-2 rounded"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <input
+            className="border p-2 rounded"
+            placeholder="Link"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+          />
+
+          {/* ✅ Type selection */}
+          <div className="flex gap-4 mt-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                checked={type === "youtube"}
+                onChange={() => setType("youtube")}
+              />
+              YouTube
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                checked={type === "tweet"}
+                onChange={() => setType("tweet")}
+              />
+              Tweet
+            </label>
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div className="flex justify-center mt-4">
+          <Button
+            variant="primary"
+            text="Submit"
+            size="md"
+            onClick={submit}
+          />
+        </div>
+      </div>
     </div>
+  );
 }

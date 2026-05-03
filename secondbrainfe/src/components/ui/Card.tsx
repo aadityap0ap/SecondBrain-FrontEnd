@@ -2,7 +2,7 @@ import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect } from "react";
 
 interface CardType {
-  type: "youtube" | "twitter";
+  type: "youtube" | "tweet";
   link: string;
   title: string;
 }
@@ -27,7 +27,7 @@ export function Card({ type, link, title }: CardType) {
     : link;
 
   useEffect(() => {
-    if (type === "twitter") {
+    if (type === "tweet") {
       // Load Twitter script once
       if (!(window as any).twttr) {
         const script = document.createElement("script");
@@ -76,7 +76,7 @@ export function Card({ type, link, title }: CardType) {
         )}
 
         {/* Twitter */}
-        {type === "twitter" && (
+        {type === "tweet" && (
           <blockquote className="twitter-tweet">
             <a href={twitterUrl}></a>
           </blockquote>
