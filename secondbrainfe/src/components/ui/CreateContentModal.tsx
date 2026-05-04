@@ -31,8 +31,7 @@ export function CreateContentModal({ open, onClose }: Props) {
           },
         }
       );
-
-      onClose(); // close modal after submit
+      onClose();
     } catch (err) {
       console.error(err);
     }

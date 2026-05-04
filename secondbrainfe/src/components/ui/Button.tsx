@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 interface ButtonProps {
   variant: "primary" | "secondary";
   size: "sm" | "md" | "lg";
-  text: string;
+  text?: string;
   startIcon?: ReactElement;
   endIcon?: ReactElement;
   onClick?: () => void;
@@ -26,7 +26,7 @@ const defaultStyles =
 export const Button = (props: ButtonProps) => {
   return (
     <button
-      type="button" // ✅ CRITICAL FIX
+      type="button" 
       onClick={props.onClick}
       className={`${variantStyle[props.variant]} ${defaultStyles} ${sizeStyles[props.size]}`}
     >
