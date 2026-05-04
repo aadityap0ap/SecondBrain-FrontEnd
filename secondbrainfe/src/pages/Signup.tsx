@@ -24,29 +24,33 @@ export function Signup() {
         username,
         password,
       });
+
       alert("You are SignedUp!");
       navigate("/signin");
     } catch (err: any) {
-     console.log(err);
-    console.log(err.response?.data);
-    alert(err.response?.data?.message || "Signup failed ");
-}
+      console.log(err.response?.data);
+      alert(err.response?.data?.message || "Signup failed");
+    }
   }
 
   return (
     <div className="h-screen w-screen bg-gray-200 flex justify-center items-center">
-      <div className="bg-white rounded-md border min-w-48 p-8">
+      <div className="bg-white rounded-md border min-w-48 p-8 flex flex-col items-center">
+        
+        <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
+
         <Input ref={usernameRef} placeholder="Username" />
         <Input ref={passwordRef} placeholder="Password" />
 
-        <div className="flex justify-center pt-4">
+        <div className="flex justify-center pt-4 w-full">
           <Button
             variant="secondary"
             size="md"
-            text="SignUp"
+            text="Sign Up"
             onClick={signup}
           />
         </div>
+
       </div>
     </div>
   );
