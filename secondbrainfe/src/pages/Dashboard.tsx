@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // ✅ (already there)
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,10 +7,10 @@ import { Card } from "../components/ui/Card";
 import { CreateContentModal } from "../components/ui/CreateContentModal";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
-//import { Sidebar } from "../components/ui/Sidebar";
-//.import { BACKEND_URL } from "../config";
 import { BACKEND_URL } from "../config";
 import { Sidebar } from "../components/ui/Sidebar";
+import { ProfileIcon } from "../icons/Profile";
+
 type ContentType = "youtube" | "tweet";
 
 type Content = {
@@ -24,8 +24,15 @@ export default function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [contents, setContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/"); 
+  };
 
   async function fetchContent() {
     try {
@@ -38,7 +45,7 @@ export default function Dashboard() {
 
       const response = await axios.get(`${BACKEND_URL}/content`, {
         headers: {
-          Authorization: `Bearer ${token}`, // FIX
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -73,7 +80,7 @@ export default function Dashboard() {
           open={modalOpen}
           onClose={() => {
             setModalOpen(false);
-            fetchContent(); // refresh
+            fetchContent();
           }}
         />
 
@@ -93,6 +100,27 @@ export default function Dashboard() {
             size="md"
             text="Add Content"
           />
+
+          
+          <div className="relative">
+            <div
+              onClick={() => setOpen(!open)}
+              className="cursor-pointer"
+            >
+              <ProfileIcon />
+            </div>
+
+            {open && (
+              <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow">
+                <button
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content */}
