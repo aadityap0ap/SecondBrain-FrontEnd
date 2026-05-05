@@ -7,9 +7,10 @@ import { Card } from "../components/ui/Card";
 import { CreateContentModal } from "../components/ui/CreateContentModal";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
-import { Sidebar } from "../components/ui/Sidebar";
+//import { Sidebar } from "../components/ui/Sidebar";
+//.import { BACKEND_URL } from "../config";
 import { BACKEND_URL } from "../config";
-
+import { Sidebar } from "../components/ui/Sidebar";
 type ContentType = "youtube" | "tweet";
 
 type Content = {
@@ -37,7 +38,7 @@ export default function Dashboard() {
 
       const response = await axios.get(`${BACKEND_URL}/content`, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ FIX
+          Authorization: `Bearer ${token}`, // FIX
         },
       });
 
