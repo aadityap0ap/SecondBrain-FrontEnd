@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { CrossIcon } from "../../icons/CrossIcon";
-//import { Input } from "./Input";
 import { Button } from "./Button";
 import { BACKEND_URL } from "../../config";
 
@@ -10,10 +9,12 @@ type Props = {
   onClose: () => void;
 };
 
+type ContentType = "youtube" | "tweet" | "instagram" | "linkedin";
+
 export function CreateContentModal({ open, onClose }: Props) {
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
-  const [type, setType] = useState<"youtube" | "tweet">("youtube");
+  const [type, setType] = useState<ContentType>("youtube");
 
   async function submit() {
     try {
@@ -27,10 +28,11 @@ export function CreateContentModal({ open, onClose }: Props) {
         },
         {
           headers: {
-           Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+
       onClose();
     } catch (err) {
       console.error(err);
@@ -66,8 +68,8 @@ export function CreateContentModal({ open, onClose }: Props) {
             onChange={(e) => setLink(e.target.value)}
           />
 
-          {/* ✅ Type selection */}
-          <div className="flex gap-4 mt-2">
+          {/* ✅ Platform Selection */}
+          <div className="flex flex-col gap-2 mt-2">
             <label className="flex items-center gap-2">
               <input
                 type="radio"
@@ -83,7 +85,25 @@ export function CreateContentModal({ open, onClose }: Props) {
                 checked={type === "tweet"}
                 onChange={() => setType("tweet")}
               />
-              Tweet
+              Twitter
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                checked={type === "instagram"}
+                onChange={() => setType("instagram")}
+              />
+              Instagram
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                checked={type === "linkedin"}
+                onChange={() => setType("linkedin")}
+              />
+              LinkedIn
             </label>
           </div>
         </div>

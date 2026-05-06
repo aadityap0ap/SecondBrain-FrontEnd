@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"; // ✅ (already there)
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import { BACKEND_URL } from "../config";
 import { Sidebar } from "../components/ui/Sidebar";
 import { ProfileIcon } from "../icons/Profile";
 
-type ContentType = "youtube" | "tweet";
+type ContentType = "youtube" | "tweet" | "instagram" | "linkedin";
 
 type Content = {
   _id: string;
@@ -28,12 +28,14 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
-  
+  // ✅ Logout
   const handleLogout = () => {
+    setOpen(false); // close dropdown
     localStorage.removeItem("token");
-    navigate("/"); 
+    navigate("/signin");
   };
 
+  // ✅ Fetch content
   async function fetchContent() {
     try {
       const token = localStorage.getItem("token");
@@ -49,8 +51,16 @@ export default function Dashboard() {
         },
       });
 
+      // ✅ cleaner filtering
+      const allowedTypes: ContentType[] = [
+        "youtube",
+        "tweet",
+        "instagram",
+        "linkedin",
+      ];
+
       const filtered: Content[] = response.data.contents.filter(
-        (item: any) => item.type === "youtube" || item.type === "tweet"
+        (item: any) => allowedTypes.includes(item.type)
       );
 
       setContents(filtered);
@@ -84,7 +94,7 @@ export default function Dashboard() {
           }}
         />
 
-        {/* Buttons */}
+        {/* Top Buttons */}
         <div className="flex items-center justify-end gap-4">
           <Button
             startIcon={<ShareIcon size="md" />}
@@ -101,7 +111,7 @@ export default function Dashboard() {
             text="Add Content"
           />
 
-          
+          {/* ✅ Profile Dropdown */}
           <div className="relative">
             <div
               onClick={() => setOpen(!open)}
@@ -111,7 +121,7 @@ export default function Dashboard() {
             </div>
 
             {open && (
-              <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow">
+              <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow z-50">
                 <button
                   onClick={handleLogout}
                   className="w-full px-4 py-2 text-left hover:bg-gray-100"

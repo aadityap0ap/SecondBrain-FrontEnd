@@ -2,7 +2,7 @@ import { ShareIcon } from "../../icons/ShareIcon";
 import { useEffect } from "react";
 
 interface CardType {
-  type: "youtube" | "tweet";
+  type: "youtube" | "tweet" | "linkedin" | "instagram";
   link: string;
   title: string;
 }
@@ -21,21 +21,18 @@ const getYoutubeEmbed = (url: string) => {
 };
 
 export function Card({ type, link, title }: CardType) {
-
   const twitterUrl = link.includes("x.com")
     ? link.replace("x.com", "twitter.com")
     : link;
 
   useEffect(() => {
     if (type === "tweet") {
-      // Load Twitter script once
       if (!(window as any).twttr) {
         const script = document.createElement("script");
         script.src = "https://platform.twitter.com/widgets.js";
         script.async = true;
         document.body.appendChild(script);
       } else {
-        // Re-render tweets if script already loaded
         (window as any).twttr.widgets.load();
       }
     }
@@ -55,14 +52,13 @@ export function Card({ type, link, title }: CardType) {
           <a href={link} target="_blank" rel="noreferrer">
             <ShareIcon size="md" />
           </a>
-          <ShareIcon size="md" />
         </div>
       </div>
 
       {/* Content */}
       <div className="pt-4">
 
-        {/* YouTube */}
+        {/* ✅ YouTube */}
         {type === "youtube" && (
           <div className="w-full aspect-video">
             <iframe
@@ -75,11 +71,45 @@ export function Card({ type, link, title }: CardType) {
           </div>
         )}
 
-        {/* Twitter */}
+        {/* ✅ Twitter */}
         {type === "tweet" && (
           <blockquote className="twitter-tweet">
             <a href={twitterUrl}></a>
           </blockquote>
+        )}
+
+        {/* ✅ Instagram (simple preview) */}
+        {type === "instagram" && (
+          <div className="text-center">
+            <p className="text-sm text-gray-500 mb-2">
+              Instagram Post
+            </p>
+            <a
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 underline"
+            >
+              View on Instagram
+            </a>
+          </div>
+        )}
+
+        {/* ✅ LinkedIn (simple preview) */}
+        {type === "linkedin" && (
+          <div className="text-center">
+            <p className="text-sm text-gray-500 mb-2">
+              LinkedIn Post
+            </p>
+            <a
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 underline"
+            >
+              View on LinkedIn
+            </a>
+          </div>
         )}
 
       </div>

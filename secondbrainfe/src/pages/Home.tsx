@@ -16,17 +16,17 @@ export default function Home() {
          
       <div className="flex gap-4">
         <Button
-          variant="primary"
-          size="md"
-          text="Sign In"
-          onClick={() => navigate("/signin")}
-        />
-
-        <Button
           variant="secondary"
           size="md"
           text="Sign Up"
           onClick={() => navigate("/signup")}
+        />
+
+        <Button
+          variant="primary"
+          size="md"
+          text="Sign In"
+          onClick={() => navigate("/signin")}
         />
       </div>
       </div>
